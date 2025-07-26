@@ -1,5 +1,8 @@
+
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 
 interface BookFilter {
@@ -38,11 +41,11 @@ class User {
     }
 
     public void returnBook(Book book) {
-        if (library.hasBook(book)) { // should check in borrowedBooks (downloadBooks.contains(book))
+        if (borrowedBooks.contains(book)) {
             borrowedBooks.remove(book);
             ((PrintBook) book).setAvailable(true);
         } else {
-            System.out.println(book.getFormattedTitle() + " is not from this library.");
+            System.out.println(book.getFormattedTitle() + " is not borrowed by this user.");
         }
     }
 
@@ -170,7 +173,7 @@ public class Library implements BookFilter {
             }
         }
 
-        digitalBooks.sort(Book.comparator);
+        digitalBooks.sort(Book.byTitle);
         return digitalBooks;
     }
 
@@ -183,7 +186,7 @@ public class Library implements BookFilter {
             }
         }
 
-        digitalBooks.sort(Book.comparator);
+        digitalBooks.sort(Book.byTitle);
         return digitalBooks;
     }
 
@@ -196,7 +199,7 @@ public class Library implements BookFilter {
             }
         }
 
-        digitalBooks.sort(Book.comparator);
+        digitalBooks.sort(Book.byTitle);
         return digitalBooks;
     }
 
@@ -209,7 +212,7 @@ public class Library implements BookFilter {
             }
         }
 
-        printBooks.sort(Book.comparator);
+        printBooks.sort(Book.byTitle);
         return printBooks;
     }
 
@@ -222,7 +225,7 @@ public class Library implements BookFilter {
             }
         }
 
-        printBooks.sort(Book.comparator);
+        printBooks.sort(Book.byTitle);
         return printBooks;
     }
 
@@ -235,8 +238,20 @@ public class Library implements BookFilter {
             }
         }
 
-        printBooks.sort(Book.comparator);
+        printBooks.sort(Book.byTitle);
         return printBooks;
+    }
+
+    public void sortByTitle() {
+        Collections.sort(books, Book.byTitle);
+    }
+
+    public void sortByAuthor() {
+        Collections.sort(books, Book.byAuthor);
+    }
+
+    public void sortByGenre() {
+        Collections.sort(books, Book.byGenre);
     }
 
 }
@@ -264,7 +279,9 @@ abstract class Book {
         this.pageCount = pageCount;
     }
 
-    static final Comparator<Book> comparator = Comparator.comparing(Book::getTitle);
+    static final Comparator<Book> byTitle = Comparator.comparing(Book::getTitle);
+    static final Comparator<Book> byAuthor = Comparator.comparing(Book::getAuthor);
+    static final Comparator<Book> byGenre = Comparator.comparing(Book::getGenre);
 
     public String toString() {
         return "Title: " + this.title + " By Author: " + this.author + " (Genre: " + this.genre + " )";
