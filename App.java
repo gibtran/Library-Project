@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class App {
     User user;
@@ -18,156 +17,251 @@ public class App {
     }
 
     void runMainMenu() {
-        System.out.println("-----------------------------------");
-        System.out.println("LIBRARY SYSTEM");
-        System.out.println("-----------------------------------");
-
         while (true) {
-            System.out.println("-------------------------------");
+            System.out.println("-----------------------------------");
+            System.out.println("          LIBRARY SYSTEM          ");
+            System.out.println("-----------------------------------");
             System.out.println("Select an option:");
             System.out.println("    1. View all books");
-            System.out.println("    2. Search book by title");
-            System.out.println("    3. View your Book history");
-            System.out.println("    4. Return print book to the library");
+            System.out.println("    2. Checkout a book");
+            System.out.println("    3. View your books");
+            System.out.println("    4. Return a print book");
             System.out.println("    5. Exit");
-            System.out.println("-------------------------------");
+            System.out.println("-----------------------------------");
             int choice = In.nextInt();
             if (choice == 1) {
                 viewAllBooks();
             } else if (choice == 2) {
-                searchBookByTitle();
+                checkoutBook();
             } else if (choice == 3) {
-                viewBookHistory();
+                viewBooks();
             } else if (choice == 4) {
                 returnPrintBook();
             } else if (choice == 5) {
-                System.out.println("Existing...");
-                System.out.println("Thank you for using the App!");
+                System.out.println("-----------------------------------");
+                System.out.println("Exiting...");
+                System.out.println("-----------------------------------");
+                System.out.println("Thank you for using the app!");
+                System.out.println("-----------------------------------");
                 break;
             } else {
+                System.out.println("-----------------------------------");
                 System.out.println("Pick an option from 1 - 5!");
             }
         }
     }
 
     void viewAllBooks() {
-        System.out.println("--------------------------------");
-        System.out.println("Current books in the library are: ");
-        System.out.println(library);
-        System.out.println("--------------------------------");
+        System.out.println("-----------------------------------");
+        System.out.println("Books in the library: ");
+        System.out.println(library + "-----------------------------------");
 
         while (true) {
-            System.out.println("Would you like to: " + " \n1.Sort" + " \n2.Filter" + " \n4.Exist");
+            System.out.println("Select an option: ");
+            System.out.println("    1. Sort");
+            System.out.println("    2. Filter");
+            System.out.println("    3. Exit");
+            System.out.println("-----------------------------------");
             int choice = In.nextInt();
+
             if (choice == 1) {
-                System.out.println("You can sort library by:  " + " \n1.Title" + " \n2.Author" + " \n3.Genre"
-                        + " \n4.Exist");
+                System.out.println("-----------------------------------");
+                System.out.println("You can sort library by:  ");
+                System.out.println("    1. Title");
+                System.out.println("    2. Author");
+                System.out.println("    3. Genre");
+                System.out.println("    4. Exit");
+                System.out.println("-----------------------------------");
+
                 int choice1 = In.nextInt();
+                System.out.println("-----------------------------------");
+
                 if (choice1 == 1) {
                     library.sortByTitle();
-                    System.out.println("\nSorting by Title... ");
+                    System.out.println("Sorting by Title... ");
                 } else if (choice1 == 2) {
                     library.sortByAuthor();
-                    System.out.println("\nSorting by Author... ");
+                    System.out.println("Sorting by Author... ");
                 } else if (choice1 == 3) {
                     library.sortByGenre();
-                    System.out.println("\nSorting by Genre... ");
+                    System.out.println("Sorting by Genre... ");
                 } else if (choice1 == 4) {
-                    System.out.println("Existing...");
-                    break;
+                    System.out.println("Exiting...");
+                    return;
                 }
-                System.out.println("\n------------");
+                System.out.println("-----------------------------------");
                 System.out.println("New order: ");
-                System.out.println("\n" + library);
+                System.out.println("-----------------------------------");
+                System.out.println(library + "-----------------------------------");
             } else if (choice == 2) {
-                System.out
-                        .println("You can filter library by: " + "\n1.Digital book" + "\n2.Print book" + " \n4.Exist");
+                System.out.println("-----------------------------------");
+                System.out.println("You can filter library by: ");
+                System.out.println("    1. Digital book");
+                System.out.println("    2. Print book");
+                System.out.println("    3. Filter by genre");
+                System.out.println("    4. Filter by author");
+                System.out.println("    5. Exit");
+                System.out.println("-----------------------------------");
                 int choice2 = In.nextInt();
+
                 if (choice2 == 1) {
-                    List<Book> digitalBooks = library.filterDigitalBook();
-                    System.out.println("\nFiltering Digital Book... ");
-                    System.out.println("\n------------");
-                    System.out.println(new Library(new ArrayList<>(digitalBooks)));
+                    Library digitalBooks = library.filterDigitalBook();
+                    System.out.println("-----------------------------------");
+                    System.out.println("Filtering digital books... ");
+                    System.out.println("-----------------------------------");
+                    System.out.println(digitalBooks + "-----------------------------------");
                 } else if (choice2 == 2) {
-                    List<Book> printBooks = library.filterPrintBook();
-                    System.out.println("\nFiltering Print Book... ");
-                    System.out.println("\n------------");
-                    System.out.println(new Library(new ArrayList<>(printBooks)));
+                    Library printBooks = library.filterPrintBook();
+                    System.out.println("\nFiltering print books... ");
+                    System.out.println("-----------------------------------");
+                    System.out.println(printBooks + "-----------------------------------");
+                } else if (choice2 == 3) {
+                    System.out.println("Filtering book by genre...");
+
+                    System.out.println("----------Fiction----------");
+                    Library fictionBooks = library.filterBooks(Genre.FICTION);
+                    System.out.println(fictionBooks);
+
+                    System.out.println("----------Mystery----------");
+                    Library mysteryBooks = library.filterBooks(Genre.MYSTERY);
+                    System.out.println(mysteryBooks);
+
+                    System.out.println("----------Non-Fiction----------");
+                    Library nonFictionBooks = library.filterBooks(Genre.NON_FICTION);
+                    System.out.println(nonFictionBooks);
+
+                    System.out.println("----------Fantasy----------");
+                    Library fantasyBooks = library.filterBooks(Genre.FANTASY);
+                    System.out.println(fantasyBooks);
+
+                    System.out.println("----------Science Fiction----------");
+                    Library scienceFictionBooks = library.filterBooks(Genre.SCIENCE_FICTION);
+                    System.out.println(scienceFictionBooks);
+
+                    System.out.println("----------Romance----------");
+                    Library romanceBooks = library.filterBooks(Genre.ROMANCE);
+                    System.out.println(romanceBooks);
+
+                    System.out.println("----------Poetry----------");
+                    Library poetryBooks = library.filterBooks(Genre.POETRY);
+                    System.out.println(poetryBooks);
+
+                    System.out.println("-----------------------------------");
                 } else if (choice2 == 4) {
-                    System.out.println("Existing...");
-                    break;
+                    System.out.println("-----------------------------------");
+                    System.out.println("What is the name of the author you want to find? (Case-sensitive)");
+                    System.out.println("-----------------------------------");
+                    String ans = In.nextLine();
+                    Library authorBooks = library.filterBooks(ans);
+                    System.out.println("-----------------------------------");
+
+                    if (authorBooks.getBooks().isEmpty()) {
+                        System.out.println("No books found for author: " + ans);
+                        System.out.println("-----------------------------------");
+                    } else {
+                        System.out.println("Books by " + ans + ":\n");
+                        for (Book book : authorBooks.getBooks()) {
+                            book.displayInfo();
+                            System.out.println();
+                        }
+                    }
+
+                    System.out.println("-----------------------------------");
+                } else if (choice2 == 5) {
+                    System.out.println("-----------------------------------");
+                    System.out.println("Exiting...");
+                    return;
                 }
-            } else if (choice == 4) {
-                System.out.println("Existing...");
-                break;
+            } else if (choice == 3) {
+                System.out.println("-----------------------------------");
+                System.out.println("Exiting...");
+                return;
+            } else {
+                System.out.println("-----------------------------------");
+                System.out.println("Pick an option from 1-3!");
+                System.out.println("-----------------------------------");
             }
         }
 
     }
 
-    void searchBookByTitle() {
+    void checkoutBook() {
         while (true) {
-            System.out.println("Enter the title of the book: ");
-            String title = In.nextLine().trim();
-            Book foundedBook = library.findBook(title);
-            if (foundedBook != null) {
-                System.out.println("-------------");
-                System.out.println("The book is: ");
-                System.out.println("-------------");
+            System.out.println("-----------------------------------");
+            System.out.println("Enter the title of the book (Case-sensitive): ");
+            System.out.println("-----------------------------------");
+            String title = In.nextLine();
+            Book foundedBook = library.getBook(title);
 
+            if (foundedBook != null) {
+                System.out.println("-----------------------------------");
+                System.out.println("Book found: ");
+                System.out.println("-----------------------------------");
                 foundedBook.displayInfo();
             } else {
-                System.out.println("Sorry, can't find the book with your titles!");
+                System.out.println("-----------------------------------");
+                System.out.println("Sorry, can't find a book with that title!");
                 return;
             }
-            System.out.println("Would you like to check out this book? (Yes/No) ");
-            String choice = In.nextLine().toLowerCase().trim();
+            System.out.println("-----------------------------------");
+            System.out.println("Would you like to check out this book? (y/n) ");
+            String choice = In.nextLine();
 
-            if (choice.equals("yes")) {
+            if (choice.equals("y")) {
                 if (foundedBook instanceof DigitalBook d) {
                     if (d.canDownload()) {
-                        System.out.println("This is Digital book, would you like to download it? (Yes/No)");
-                        String choice2 = In.nextLine().toLowerCase();
-                        if (choice2.equals("yes")) {
-                            System.out.println("This book has been downloaded to your account");
+                        System.out.println("This is a digital book, would you like to download it? (y/n)");
+                        String choice2 = In.nextLine();
+                        if (choice2.equals("y")) {
+                            System.out.println("This book has been downloaded.");
                             user.checkoutBook(foundedBook);
                         }
                     } else {
-                        System.out.println("Sorry this book can not be downloaded");
+                        System.out.println("Sorry this book cannot be downloaded.");
                     }
                 } else if (foundedBook instanceof PrintBook p) {
                     if (p.getAvailable()) {
-                        System.out.println("This Print Book is available, would you like to borrow it? (Yes/No)");
-                        String choice2 = In.nextLine().toLowerCase();
-                        if (choice2.equals("yes")) {
-                            System.out.println("You have successfully borrowed the book");
+                        System.out.println("This print book is available, would you like to borrow it? (y/n)");
+                        String choice2 = In.nextLine();
+                        if (choice2.equals("y")) {
+                            System.out.println("-----------------------------------");
+                            System.out.println("You have borrowed: " + foundedBook.getFormattedTitle());
                             user.checkoutBook(foundedBook);
                         }
                     } else {
-                        System.out.println("Sorry this Book is not available ");
+                        System.out.println("Sorry this book is not available!");
                     }
                 }
-
-            }
-            System.out.println("Do you want to choose other books or exit");
-            System.out.println("    1. Choose another book");
-            System.out.println("    2. Exit");
-            int choice3 = In.nextInt();
-            if (choice3 == 1) {
-                searchBookByTitle();
-            } else if (choice3 == 2) {
-                System.out.println("Existing...");
-                break;
             } else {
-                System.out.println("Please choose option 1 or 2");
+                System.out.println("Cancelled checkout process.");
             }
 
+            while (true) {
+                System.out.println("-----------------------------------");
+                System.out.println("Select an option: ");
+                System.out.println("    1. Choose another book");
+                System.out.println("    2. Exit");
+                System.out.println("-----------------------------------");
+                int choice3 = In.nextInt();
+
+                if (choice3 == 1) {
+                    break;
+                } else if (choice3 == 2) {
+                    System.out.println("-----------------------------------");
+                    System.out.println("Exiting...");
+                    return;
+                } else {
+                    System.out.println("-----------------------------------");
+                    System.out.println("Pick an option from 1-2!");
+                }
+            }
         }
 
     }
 
-    void viewBookHistory() {
-        System.out.println("This is your book history: ");
+    void viewBooks() {
+        System.out.println("-----------------------------------");
+        System.out.println("These are your books: ");
         System.out.println("- Borrowed books: ");
         user.listBorrowedBooks();
         System.out.println("- Downloaded books: ");
@@ -175,19 +269,29 @@ public class App {
     }
 
     void returnPrintBook() {
-        System.out.println("This your borrowed book list:");
+        if (user.getBorrowedBooks().isEmpty()) {
+            System.out.println("-----------------------------------");
+            System.out.println("You have no borrowed books!");
+            return;
+        }
+
+        System.out.println("-----------------------------------");
+        System.out.println("This is your borrowed book list:");
         user.listBorrowedBooks();
-        System.out.println("What book you want to return to the library?");
-        String title = In.nextLine().trim();
-        Book bookToReturn = library.findBook(title);
+        System.out.println("What book would you like to return? (Title, case-sensitive)");
+        System.out.println("-----------------------------------");
+        String title = In.nextLine();
+        System.out.println("-----------------------------------");
+        Book bookToReturn = library.getBook(title);
+
         if (bookToReturn != null && library.hasBook(bookToReturn)) {
+            System.out.println("You have returned: " + bookToReturn.getFormattedTitle());
             user.returnBook(bookToReturn);
-            System.out.println("Thank you! You have returned successfully your book to the library");
-            System.out.println("Your borrowed book list now:");
+            System.out.println("-----------------------------------");
+            System.out.println("Your updated borrowed books list:");
             user.listBorrowedBooks();
         } else {
-            System.out.println("You dont have " + title + " in your borrowed list");
-            return;
+            System.out.println("You dont have " + title + " in your borrowed book list!");
         }
     }
 
@@ -214,6 +318,7 @@ class Booklist {
             new PrintBook("Wuthering Heights", "Emily Brontë", Genre.ROMANCE, 416, CoverType.GRAPHIC_NOVEL),
             new DigitalBook("The Raven", "Edgar Allan Poe", Genre.POETRY, 64, Format.TXT),
             new PrintBook("The Catcher in the Rye", "J.D. Salinger", Genre.FICTION, 277, CoverType.SPIRAL_BOUND),
-            new DigitalBook("Dune", "Frank Herbert", Genre.SCIENCE_FICTION, 412, Format.AZW)
+            new DigitalBook("Dune", "Frank Herbert", Genre.SCIENCE_FICTION, 412, Format.AZW),
+            new PrintBook("The Idiot", "Fyodor Dostoevsky", Genre.POETRY, 650, CoverType.HARDCOVER)
     };
 }

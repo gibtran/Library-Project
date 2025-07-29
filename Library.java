@@ -1,28 +1,40 @@
-
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
 interface BookFilter {
-    // Returns a list of all digital books.
-    List<Book> filterDigitalBook();
+    // Returns all digital books.
+    Library filterDigitalBook();
 
-    // Returns a list of all digital books by author.
-    List<Book> filterDigitalBook(String author);
+    // Returns all digital books by author.
+    Library filterDigitalBook(String author);
 
-    // Returns a list of all digital books by genre.
-    List<Book> filterDigitalBook(Genre genre);
+    // Returns all digital books by genre.
+    Library filterDigitalBook(Genre genre);
 
-    // Returns a list of all print books.
-    List<Book> filterPrintBook();
+    // Returns all print books.
+    Library filterPrintBook();
 
-    // Returns a list of all print books by author.
-    List<Book> filterPrintBook(String author);
+    // Returns all print books by author.
+    Library filterPrintBook(String author);
 
-    // Returns a list of all print books by genre.
-    List<Book> filterPrintBook(Genre genre);
+    // Returns all print books by genre.
+    Library filterPrintBook(Genre genre);
+
+    // Returns all books by author.
+    Library filterBooks(String author);
+
+    // Returns all books in genre.
+    Library filterBooks(Genre genre);
+}
+
+interface BookSort {
+    void sortByAuthor();
+
+    void sortByGenre();
+
+    void sortByTitle();
 }
 
 class User {
@@ -58,11 +70,11 @@ class User {
                 ((PrintBook) book).setAvailable(false);
             }
         } else {
-            System.out.println("The book is not exist");
+            System.out.println("The book does not exist!");
         }
     }
 
-    public List<Book> getDownloadedBook() { // should be added 's' to show this is list
+    public List<Book> getDownloadedBooks() {
         return this.downloadedBooks;
     }
 
@@ -75,8 +87,8 @@ class User {
         }
     }
 
-    public List<Book> getBorrowedBook() {
-        return this.borrowedBooks; // should be added 's' to show this is list
+    public List<Book> getBorrowedBooks() {
+        return this.borrowedBooks;
     }
 
     public PrintBook getBorrowedBook(int index) {
@@ -117,7 +129,7 @@ class User {
     }
 }
 
-public class Library implements BookFilter {
+public class Library implements BookFilter, BookSort {
     private List<Book> books;
 
     public Library() {
@@ -137,8 +149,25 @@ public class Library implements BookFilter {
         }
     }
 
+    public Book getBook(String title) {
+        for (Book book : books) {
+            if (book.getTitle().equals(title)) {
+                return book;
+            }
+        }
+        return null;
+    }
+
     public boolean hasBook(Book book) {
         return this.books.contains(book);
+    }
+
+    public void addBook(Book book) {
+        this.books.add(book);
+    }
+
+    public List<Book> getBooks() {
+        return this.books;
     }
 
     public String toString() {
@@ -153,103 +182,130 @@ public class Library implements BookFilter {
         return result;
     }
 
-    // searching book by tittle
-    Book findBook(String title) {
-        for (Book book : books) {
-            if (book.getTitle().trim().equalsIgnoreCase(title)) {
-                return book;
-            }
-        }
-        return null;
-    }
-
-    // All methods below are for sorting.
-    public List<Book> filterDigitalBook() {
-        ArrayList<Book> digitalBooks = new ArrayList<>();
+    // All methods below are for sorting / filtering.
+    @Override
+    public Library filterDigitalBook() {
+        Library digitalBooks = new Library();
 
         for (Book book : books) {
             if (book instanceof DigitalBook) {
-                digitalBooks.add(book);
+                digitalBooks.addBook(book);
             }
         }
 
-        digitalBooks.sort(Book.byTitle);
+        digitalBooks.sortByTitle();
         return digitalBooks;
     }
 
-    public List<Book> filterDigitalBook(String author) {
-        ArrayList<Book> digitalBooks = new ArrayList<>();
+    @Override
+    public Library filterDigitalBook(String author) {
+        Library digitalBooks = new Library();
 
         for (Book book : this.books) {
             if (book instanceof DigitalBook && book.getAuthor().equals(author)) {
-                digitalBooks.add(book);
+                digitalBooks.addBook(book);
             }
         }
 
-        digitalBooks.sort(Book.byTitle);
+        digitalBooks.sortByAuthor();
         return digitalBooks;
     }
 
-    public List<Book> filterDigitalBook(Genre genre) {
-        ArrayList<Book> digitalBooks = new ArrayList<>();
+    @Override
+    public Library filterDigitalBook(Genre genre) {
+        Library digitalBooks = new Library();
 
         for (Book book : this.books) {
             if (book instanceof DigitalBook && book.getGenre() == genre) {
-                digitalBooks.add(book);
+                digitalBooks.addBook(book);
             }
         }
 
-        digitalBooks.sort(Book.byTitle);
+        digitalBooks.sortByTitle();
         return digitalBooks;
     }
 
-    public List<Book> filterPrintBook() {
-        ArrayList<Book> printBooks = new ArrayList<>();
+    @Override
+    public Library filterPrintBook() {
+        Library printBooks = new Library();
 
         for (Book book : this.books) {
             if (book instanceof PrintBook) {
-                printBooks.add(book);
+                printBooks.addBook(book);
             }
         }
 
-        printBooks.sort(Book.byTitle);
+        printBooks.sortByTitle();
         return printBooks;
     }
 
-    public List<Book> filterPrintBook(String author) {
-        ArrayList<Book> printBooks = new ArrayList<>();
+    @Override
+    public Library filterPrintBook(String author) {
+        Library printBooks = new Library();
 
         for (Book book : this.books) {
             if (book instanceof PrintBook && book.getAuthor().equals(author)) {
-                printBooks.add(book);
+                printBooks.addBook(book);
             }
         }
 
-        printBooks.sort(Book.byTitle);
+        printBooks.sortByTitle();
         return printBooks;
     }
 
-    public List<Book> filterPrintBook(Genre genre) {
-        ArrayList<Book> printBooks = new ArrayList<>();
+    @Override
+    public Library filterPrintBook(Genre genre) {
+        Library printBooks = new Library();
 
         for (Book book : this.books) {
             if (book instanceof PrintBook && book.getGenre() == genre) {
-                printBooks.add(book);
+                printBooks.addBook(book);
             }
         }
 
-        printBooks.sort(Book.byTitle);
+        printBooks.sortByGenre();
         return printBooks;
     }
 
+    @Override
+    public Library filterBooks(String author) {
+        Library books = new Library();
+
+        for (Book book : this.books) {
+            if (book.getAuthor().equals(author)) {
+                books.addBook(book);
+            }
+        }
+
+        books.sortByTitle();
+        return books;
+    }
+
+    @Override
+    public Library filterBooks(Genre genre) {
+        Library books = new Library();
+
+        for (Book book : this.books) {
+            if (book.getGenre() == genre) {
+                books.addBook(book);
+            }
+        }
+
+        books.sortByGenre();
+        return books;
+    }
+
+    @Override
     public void sortByTitle() {
         Collections.sort(books, Book.byTitle);
     }
 
+    @Override
     public void sortByAuthor() {
         Collections.sort(books, Book.byAuthor);
     }
 
+    @Override
     public void sortByGenre() {
         Collections.sort(books, Book.byGenre);
     }
