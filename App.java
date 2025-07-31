@@ -69,8 +69,7 @@ public class App {
                 System.out.println("You can sort library by:  ");
                 System.out.println("    1. Title");
                 System.out.println("    2. Author");
-                System.out.println("    3. Genre");
-                System.out.println("    4. Exit");
+                System.out.println("    3. Exit");
                 System.out.println("-----------------------------------");
 
                 int choice1 = In.nextInt();
@@ -83,12 +82,14 @@ public class App {
                     library.sortByAuthor();
                     System.out.println("Sorting by Author... ");
                 } else if (choice1 == 3) {
-                    library.sortByGenre();
-                    System.out.println("Sorting by Genre... ");
-                } else if (choice1 == 4) {
+                    System.out.println("Exiting...");
+                    return;
+                } else {
+                    System.out.println("Pick an option from 1-3!");
                     System.out.println("Exiting...");
                     return;
                 }
+
                 System.out.println("-----------------------------------");
                 System.out.println("New order: ");
                 System.out.println("-----------------------------------");
@@ -157,7 +158,6 @@ public class App {
 
                     if (authorBooks.getBooks().isEmpty()) {
                         System.out.println("No books found for author: " + ans);
-                        System.out.println("-----------------------------------");
                     } else {
                         System.out.println("Books by " + ans + ":\n");
                         for (Book book : authorBooks.getBooks()) {
@@ -198,44 +198,49 @@ public class App {
                 System.out.println("Book found: ");
                 System.out.println("-----------------------------------");
                 foundedBook.displayInfo();
+
+                System.out.println("-----------------------------------");
+                System.out.println("Would you like to check out this book? (y/n) ");
+                String choice = In.nextLine();
+
+                if (choice.equals("y")) {
+                    if (foundedBook instanceof DigitalBook d) {
+                        if (d.canDownload()) {
+                            System.out.println("This is a digital book, would you like to download it? (y/n)");
+                            String choice2 = In.nextLine();
+                            if (choice2.equals("y")) {
+                                System.out.println("This book has been downloaded.");
+                                user.checkoutBook(foundedBook);
+                            }
+                        } else {
+                            System.out.println("Sorry this book cannot be downloaded.");
+                        }
+                    } else if (foundedBook instanceof PrintBook p) {
+                        if (p.getAvailable()) {
+                            System.out.println("This print book is available, would you like to borrow it? (y/n)");
+                            String choice2 = In.nextLine();
+                            if (choice2.equals("y")) {
+                                if (user.getBorrowedBooks().size() < 3) {
+                                    System.out.println("-----------------------------------");
+                                    System.out.println("You have borrowed: " + foundedBook.getFormattedTitle());
+                                    user.checkoutBook(foundedBook);
+                                } else {
+                                    System.out.println("You have exceeded the borrowing limit");
+                                    System.out.println(
+                                            "Each Account can only borrow maximum 3 books, please return to keep using this service!");
+                                }
+                            }
+                        } else {
+                            System.out.println("Sorry this book is not available!");
+                        }
+                    }
+                } else {
+                    System.out.println("Cancelled checkout process.");
+                }
             } else {
                 System.out.println("-----------------------------------");
                 System.out.println("Sorry, can't find a book with that title!");
-                return;
             }
-            System.out.println("-----------------------------------");
-            System.out.println("Would you like to check out this book? (y/n) ");
-            String choice = In.nextLine();
-
-            if (choice.equals("y")) {
-                if (foundedBook instanceof DigitalBook d) {
-                    if (d.canDownload()) {
-                        System.out.println("This is a digital book, would you like to download it? (y/n)");
-                        String choice2 = In.nextLine();
-                        if (choice2.equals("y")) {
-                            System.out.println("This book has been downloaded.");
-                            user.checkoutBook(foundedBook);
-                        }
-                    } else {
-                        System.out.println("Sorry this book cannot be downloaded.");
-                    }
-                } else if (foundedBook instanceof PrintBook p) {
-                    if (p.getAvailable()) {
-                        System.out.println("This print book is available, would you like to borrow it? (y/n)");
-                        String choice2 = In.nextLine();
-                        if (choice2.equals("y")) {
-                            System.out.println("-----------------------------------");
-                            System.out.println("You have borrowed: " + foundedBook.getFormattedTitle());
-                            user.checkoutBook(foundedBook);
-                        }
-                    } else {
-                        System.out.println("Sorry this book is not available!");
-                    }
-                }
-            } else {
-                System.out.println("Cancelled checkout process.");
-            }
-
             while (true) {
                 System.out.println("-----------------------------------");
                 System.out.println("Select an option: ");

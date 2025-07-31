@@ -32,8 +32,6 @@ interface BookFilter {
 interface BookSort {
     void sortByAuthor();
 
-    void sortByGenre();
-
     void sortByTitle();
 }
 
@@ -263,7 +261,6 @@ public class Library implements BookFilter, BookSort {
             }
         }
 
-        printBooks.sortByGenre();
         return printBooks;
     }
 
@@ -291,7 +288,6 @@ public class Library implements BookFilter, BookSort {
             }
         }
 
-        books.sortByGenre();
         return books;
     }
 
@@ -304,12 +300,6 @@ public class Library implements BookFilter, BookSort {
     public void sortByAuthor() {
         Collections.sort(books, Book.byAuthor);
     }
-
-    @Override
-    public void sortByGenre() {
-        Collections.sort(books, Book.byGenre);
-    }
-
 }
 
 enum Genre {
@@ -357,10 +347,6 @@ abstract class Book {
 
     public Genre getGenre() {
         return this.genre;
-    }
-
-    public void changeTitle(String title) {
-        this.title = title;
     }
 
     public void displayInfo() {
